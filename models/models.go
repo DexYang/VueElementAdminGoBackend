@@ -8,7 +8,7 @@ import (
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 
-	"github.com/DeluxeYang/GinProject/pkg/setting"
+	"github.com/DeluxeYang/VueElementAdminGoBackend/pkg/setting"
 )
 
 var db *gorm.DB
@@ -16,7 +16,7 @@ var tablePrefix string
 
 // 扩展gorm.Model 定义
 type Model struct {
-	ID        uint `gorm:"primary_key;AUTO_INCREMENT"`
+	ID uint `gorm:"primary_key;AUTO_INCREMENT"`
 
 	CreatedAt time.Time
 	UpdatedAt time.Time
@@ -27,7 +27,7 @@ type Model struct {
 
 func init() {
 	var (
-		err error
+		err                                  error
 		dbType, dbName, user, password, host string
 	)
 
@@ -36,11 +36,11 @@ func init() {
 		log.Fatal(2, "Fail to get section 'database': %v", err)
 	}
 
-	dbType = sec.Key("TYPE").String() // 数据库类型mysql
-	dbName = sec.Key("NAME").String() // 数据库名blog
-	user = sec.Key("USER").String() // 用户名
-	password = sec.Key("PASSWORD").String() // 密码
-	host = sec.Key("HOST").String() // 数据库ip: port
+	dbType = sec.Key("TYPE").String()              // 数据库类型mysql
+	dbName = sec.Key("NAME").String()              // 数据库名blog
+	user = sec.Key("USER").String()                // 用户名
+	password = sec.Key("PASSWORD").String()        // 密码
+	host = sec.Key("HOST").String()                // 数据库ip: port
 	tablePrefix = sec.Key("TABLE_PREFIX").String() // 表前缀
 
 	db, err = gorm.Open(dbType, fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
@@ -53,7 +53,7 @@ func init() {
 		log.Println(err)
 	}
 
-	gorm.DefaultTableNameHandler = func (db *gorm.DB, defaultTableName string) string  {
+	gorm.DefaultTableNameHandler = func(db *gorm.DB, defaultTableName string) string {
 		return tablePrefix + defaultTableName
 	} // 默认表名处理器
 
@@ -65,7 +65,6 @@ func init() {
 func init() {
 	db.AutoMigrate(&User{})
 }
-
 
 func CloseDB() {
 	defer db.Close()

@@ -5,9 +5,9 @@ import (
 	"github.com/gin-gonic/gin"
 	"log"
 
-	"github.com/DeluxeYang/GinProject/models"
-	"github.com/DeluxeYang/GinProject/pkg/e"
-	"github.com/DeluxeYang/GinProject/pkg/util"
+	"github.com/DeluxeYang/VueElementAdminGoBackend/models"
+	"github.com/DeluxeYang/VueElementAdminGoBackend/pkg/e"
+	"github.com/DeluxeYang/VueElementAdminGoBackend/pkg/util"
 )
 
 type auth struct {
@@ -23,22 +23,22 @@ func GetAuth(c *gin.Context) {
 
 	data := make(map[string]interface{})
 
-	if c.BindJSON(&authJson) == nil {  // 绑定json
-		username := authJson.Username  // 获取用户名
+	if c.BindJSON(&authJson) == nil { // 绑定json
+		username := authJson.Username // 获取用户名
 		password := authJson.Password
 
-		valid := validation.Validation{}  // 验证
+		valid := validation.Validation{} // 验证
 		ok, _ := valid.Valid(&authJson)  // 验证数据完整性
 
-		if ok {  // 数据完整性验证成功
+		if ok { // 数据完整性验证成功
 
-			isExist := models.CheckUser(username, password)  // 验证用户名密码
-			if isExist {  // 如果存在用户名、密码
+			isExist := models.CheckUser(username, password) // 验证用户名密码
+			if isExist {                                    // 如果存在用户名、密码
 
-				token, err := util.GenerateToken(username, password)  // 生成JWT token
+				token, err := util.GenerateToken(username, password) // 生成JWT token
 
 				if err != nil {
-					code = e.ErrorAuthTokenGenerate  // token生成错误
+					code = e.ErrorAuthTokenGenerate // token生成错误
 				} else {
 					data["token"] = token
 					code = e.Success
@@ -48,9 +48,9 @@ func GetAuth(c *gin.Context) {
 				code = e.WarningWrongAuth
 			}
 
-		} else {  // 数据完整性验证失败
+		} else { // 数据完整性验证失败
 			for _, err := range valid.Errors {
-				log.Println(err.Key, err.Message)  // 打印日志
+				log.Println(err.Key, err.Message) // 打印日志
 			}
 		}
 	}

@@ -1,10 +1,10 @@
 package v1
 
 import (
-	"github.com/DeluxeYang/GinProject/pkg/e"
-	"github.com/DeluxeYang/GinProject/pkg/util"
-	"github.com/DeluxeYang/GinProject/service/menu_service"
-	"github.com/DeluxeYang/GinProject/service/role_service"
+	"github.com/DeluxeYang/VueElementAdminGoBackend/pkg/e"
+	"github.com/DeluxeYang/VueElementAdminGoBackend/pkg/util"
+	"github.com/DeluxeYang/VueElementAdminGoBackend/service/menu_service"
+	"github.com/DeluxeYang/VueElementAdminGoBackend/service/role_service"
 	"github.com/Unknwon/com"
 	"github.com/astaxie/beego/validation"
 	"github.com/gin-gonic/gin"
@@ -29,9 +29,9 @@ func GetRoles(c *gin.Context) {
 	}
 
 	appG.Response(e.Success, map[string]interface{}{
-		"list": roles,
+		"list":  roles,
 		"total": total,
-		"page": page,
+		"page":  page,
 		"limit": limit,
 	})
 }
@@ -54,7 +54,7 @@ func RoleIDCheck(id int) int {
 	return e.Success
 }
 
-func GetRole(c *gin.Context)  {
+func GetRole(c *gin.Context) {
 	appG := util.Gin{C: c}
 	id := com.StrTo(c.Param("id")).MustInt()
 
@@ -90,7 +90,7 @@ func DeleteRole(c *gin.Context) {
 	appG.Response(e.Success, user)
 }
 
-func AddRole(c *gin.Context)  {
+func AddRole(c *gin.Context) {
 	appG := util.Gin{C: c}
 
 	roleVO := role_service.RoleVO{}
@@ -126,7 +126,7 @@ func AddRole(c *gin.Context)  {
 	appG.Response(e.Success, resRoleVO)
 }
 
-func EditRole(c *gin.Context)  {
+func EditRole(c *gin.Context) {
 	appG := util.Gin{C: c}
 	id := com.StrTo(c.Param("id")).MustInt()
 

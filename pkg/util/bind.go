@@ -2,7 +2,7 @@ package util
 
 import (
 	"fmt"
-	"github.com/DeluxeYang/GinProject/pkg/e"
+	"github.com/DeluxeYang/VueElementAdminGoBackend/pkg/e"
 	"github.com/astaxie/beego/validation"
 	"github.com/gin-gonic/gin"
 )

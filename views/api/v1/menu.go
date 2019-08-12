@@ -1,9 +1,9 @@
 package v1
 
 import (
-	"github.com/DeluxeYang/GinProject/pkg/e"
-	"github.com/DeluxeYang/GinProject/pkg/util"
-	"github.com/DeluxeYang/GinProject/service/menu_service"
+	"github.com/DeluxeYang/VueElementAdminGoBackend/pkg/e"
+	"github.com/DeluxeYang/VueElementAdminGoBackend/pkg/util"
+	"github.com/DeluxeYang/VueElementAdminGoBackend/service/menu_service"
 	"github.com/gin-gonic/gin"
 )
 
@@ -18,7 +18,6 @@ func GetMenu(c *gin.Context) {
 
 	appG.Response(e.Success, menu)
 }
-
 
 func SaveMenu(c *gin.Context) {
 	appG := util.Gin{C: c}

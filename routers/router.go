@@ -1,13 +1,13 @@
 package routers
 
 import (
-	"github.com/DeluxeYang/GinProject/middleware/permission"
 	"github.com/gin-gonic/gin"
 
-	"github.com/DeluxeYang/GinProject/middleware/jwt"
-	"github.com/DeluxeYang/GinProject/pkg/setting"
-	"github.com/DeluxeYang/GinProject/views/api"
-	"github.com/DeluxeYang/GinProject/views/api/v1"
+	"github.com/DeluxeYang/VueElementAdminGoBackend/middleware/jwt"
+	"github.com/DeluxeYang/VueElementAdminGoBackend/middleware/permission"
+	"github.com/DeluxeYang/VueElementAdminGoBackend/pkg/setting"
+	"github.com/DeluxeYang/VueElementAdminGoBackend/views/api"
+	"github.com/DeluxeYang/VueElementAdminGoBackend/views/api/v1"
 )
 
 func InitRouter() *gin.Engine {

@@ -1,19 +1,19 @@
 package role_service
 
 import (
-	"github.com/DeluxeYang/GinProject/models"
-	"github.com/DeluxeYang/GinProject/pkg/util"
-	"github.com/DeluxeYang/GinProject/service/menu_service"
+	"github.com/DeluxeYang/VueElementAdminGoBackend/models"
+	"github.com/DeluxeYang/VueElementAdminGoBackend/pkg/util"
+	"github.com/DeluxeYang/VueElementAdminGoBackend/service/menu_service"
 )
 
 type RoleVO struct {
-	ID 			uint 			`json:"id"`
-	State 		int 			`json:"state"`
+	ID    uint `json:"id"`
+	State int  `json:"state"`
 
-	RoleName 	string 			`json:"role_name"`
-	Remark		string			`json:"remark"`
+	RoleName string `json:"role_name"`
+	Remark   string `json:"remark"`
 
-	Menu		[]uint			`json:"menu"`
+	Menu []uint `json:"menu"`
 }
 
 func ExistRoleList(ids []uint) (bool, error) {
@@ -59,7 +59,7 @@ func GetRole(id int) (*RoleVO, error) {
 		return nil, err
 	}
 
-	menu := role.Menu  // 暂存models.Role
+	menu := role.Menu // 暂存models.Role
 	role.Menu = []models.Menu{}
 
 	var roleVO RoleVO

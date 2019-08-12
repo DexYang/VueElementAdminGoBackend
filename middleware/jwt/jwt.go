@@ -1,13 +1,12 @@
 package jwt
 
 import (
-	"github.com/DeluxeYang/GinProject/models"
+	"github.com/gin-gonic/gin"
 	"time"
 
-	"github.com/gin-gonic/gin"
-
-	"github.com/DeluxeYang/GinProject/pkg/e"
-	"github.com/DeluxeYang/GinProject/pkg/util"
+	"github.com/DeluxeYang/VueElementAdminGoBackend/models"
+	"github.com/DeluxeYang/VueElementAdminGoBackend/pkg/e"
+	"github.com/DeluxeYang/VueElementAdminGoBackend/pkg/util"
 )
 
 func JWT() gin.HandlerFunc {
@@ -27,8 +26,8 @@ func JWT() gin.HandlerFunc {
 			} else if time.Now().Unix() > claims.ExpiresAt {
 				code = e.WarningAuthTokenTimeout
 			} else if claims != nil {
-				isExist := models.CheckUser(claims.Username, claims.Password)  // 验证用户名密码
-				if isExist { // 用户名、密码验证通过
+				isExist := models.CheckUser(claims.Username, claims.Password) // 验证用户名密码
+				if isExist {                                                  // 用户名、密码验证通过
 					c.Set("username", claims.Username)
 				} else {
 					code = e.WarningAuthAlreadyChange

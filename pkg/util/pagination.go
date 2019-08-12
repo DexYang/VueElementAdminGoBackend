@@ -1,7 +1,7 @@
 package util
 
 import (
-	"github.com/DeluxeYang/GinProject/pkg/setting"
+	"github.com/DeluxeYang/VueElementAdminGoBackend/pkg/setting"
 	"github.com/Unknwon/com"
 	"github.com/gin-gonic/gin"
 )

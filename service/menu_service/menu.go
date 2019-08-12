@@ -1,23 +1,23 @@
 package menu_service
 
 import (
-	"github.com/DeluxeYang/GinProject/models"
-	"github.com/DeluxeYang/GinProject/pkg/util"
+	"github.com/DeluxeYang/VueElementAdminGoBackend/models"
+	"github.com/DeluxeYang/VueElementAdminGoBackend/pkg/util"
 )
 
 type MenuVO struct {
-	ID				uint 	`json:"id"`
+	ID uint `json:"id"`
 
-	MenuName 		string 	`json:"menu_name"`
-	MenuType 		int 	`json:"menu_type"`
-	Remark 			string 	`json:"remark"`
-	Component 		string 	`json:"component"`
+	MenuName  string `json:"menu_name"`
+	MenuType  int    `json:"menu_type"`
+	Remark    string `json:"remark"`
+	Component string `json:"component"`
 
-	PermissionTag 	string 	`json:"permission_tag"`
-	Path 			string 	`json:"path"`
-	Icon 			string 	`json:"icon"`
+	PermissionTag string `json:"permission_tag"`
+	Path          string `json:"path"`
+	Icon          string `json:"icon"`
 
-	Children 		[]MenuVO `json:"children"`
+	Children []MenuVO `json:"children"`
 }
 
 func ExistMenuList(ids []uint) (bool, error) {
@@ -28,7 +28,7 @@ func GetMenuListByIDList(ids []uint) ([]models.Menu, error) {
 	return models.GetMenuListByIDList(ids)
 }
 
-func GetMenu() ([]MenuVO, error){
+func GetMenu() ([]MenuVO, error) {
 	menuList, _ := DFSGetMenu(0)
 	var menuVOList []MenuVO
 
@@ -115,7 +115,6 @@ func DFSSaveMenu(menuList []models.Menu, parentID uint, permissionTag string) er
 	}
 	return nil
 }
-
 
 func GetMenuOfUser(username string) ([]MenuVO, error) {
 	user, err := models.GetUserByUsername(username)

@@ -1,21 +1,21 @@
 package user_service
 
 import (
-	"github.com/DeluxeYang/GinProject/models"
-	"github.com/DeluxeYang/GinProject/pkg/util"
-	"github.com/DeluxeYang/GinProject/service/role_service"
+	"github.com/DeluxeYang/VueElementAdminGoBackend/models"
+	"github.com/DeluxeYang/VueElementAdminGoBackend/pkg/util"
+	"github.com/DeluxeYang/VueElementAdminGoBackend/service/role_service"
 )
 
 type UserVO struct {
-	ID 			uint 			`json:"id"`
-	State 		int 			`json:"state"`
+	ID    uint `json:"id"`
+	State int  `json:"state"`
 
-	Username 	string 			`json:"username"`
-	Password	string			`json:"password"`
-	Email 		string 			`json:"email"`
-	Mobile 		string 			`json:"mobile"`
+	Username string `json:"username"`
+	Password string `json:"password"`
+	Email    string `json:"email"`
+	Mobile   string `json:"mobile"`
 
-	Roles 		[]uint			`json:"roles"`  // 用户与角色多对多
+	Roles []uint `json:"roles"` // 用户与角色多对多
 }
 
 func GetUserList(offset int, limit int, key string) ([]UserVO, error) {
@@ -53,7 +53,7 @@ func GetUser(id int) (*UserVO, error) {
 		return nil, err
 	}
 
-	roleModels := user.Roles  // 暂存models.Role
+	roleModels := user.Roles // 暂存models.Role
 	user.Roles = []models.Role{}
 
 	var userVO UserVO
