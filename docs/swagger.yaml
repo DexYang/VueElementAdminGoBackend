@@ -1,0 +1,388 @@
+definitions:
+  util.Response:
+    properties:
+      code:
+        example: 200
+        type: integer
+      data:
+        type: object
+      message:
+        example: ok
+        type: string
+    type: object
+info:
+  contact: {}
+  license: {}
+paths:
+  /api/v1/auth:
+    post:
+      parameters:
+      - description: username
+        in: body
+        name: username
+        required: true
+        schema:
+          type: string
+      - description: password
+        in: body
+        name: password
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"data":{"token": ""},"message":"ok"}'
+          schema:
+            $ref: '#/definitions/util.Response'
+      summary: login
+  /api/v1/info:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"data":{"menus":[], "username":"x"},"message":"ok"}'
+          schema:
+            $ref: '#/definitions/util.Response'
+      summary: Get user info
+  /api/v1/menus:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"data":[{"id":1, "menu_name":"", "menu_type":0,
+            "remark":"", "component":"", "permission_tag":"", "path":"", "icon":"",
+            "children":[]}],"message":"ok"}'
+          schema:
+            $ref: '#/definitions/util.Response'
+      summary: Get menu tree data
+      tags:
+      - menu
+    post:
+      parameters:
+      - description: menu_name
+        in: body
+        name: menu_name
+        required: true
+        schema:
+          type: string
+      - description: menu_type
+        in: body
+        name: menu_type
+        required: true
+        schema:
+          type: integer
+      - description: remark
+        in: body
+        name: remark
+        required: true
+        schema:
+          type: string
+      - description: component
+        in: body
+        name: component
+        required: true
+        schema:
+          type: string
+      - description: permission_tag
+        in: body
+        name: permission_tag
+        required: true
+        schema:
+          type: string
+      - description: path
+        in: body
+        name: path
+        required: true
+        schema:
+          type: string
+      - description: icon
+        in: body
+        name: icon
+        required: true
+        schema:
+          type: string
+      - description: children
+        in: body
+        name: children
+        required: true
+        schema:
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"data":{},"message":"ok"}'
+          schema:
+            $ref: '#/definitions/util.Response'
+      summary: Save all menu
+      tags:
+      - menu
+  /api/v1/roles:
+    get:
+      parameters:
+      - description: page
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: limit
+        in: query
+        name: limit
+        required: true
+        type: integer
+      - description: key
+        in: query
+        name: key
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"data":{"list":[], "limit":10, "page":1, "total":100},"message":"ok"}'
+          schema:
+            $ref: '#/definitions/util.Response'
+      summary: Get role list
+      tags:
+      - roles
+    post:
+      parameters:
+      - description: role_name
+        in: body
+        name: role_name
+        required: true
+        schema:
+          type: string
+      - description: remark
+        in: body
+        name: remark
+        required: true
+        schema:
+          type: string
+      - description: menu
+        in: body
+        name: menu
+        required: true
+        schema:
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"data":{"id":1, "role_name":"x", "remark": "",
+            "menu": []},"message":"ok"}'
+          schema:
+            $ref: '#/definitions/util.Response'
+      summary: Create a single role
+      tags:
+      - roles
+  /api/v1/roles/{id}:
+    delete:
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"data":{"id":1, "role_name":"x", "remark": "",
+            "menu": []},"message":"ok"}'
+          schema:
+            $ref: '#/definitions/util.Response'
+      summary: Delete a single role
+      tags:
+      - roles
+    get:
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"data":{"id":1, "role_name":"x", "remark": "",
+            "menu": []},"message":"ok"}'
+          schema:
+            $ref: '#/definitions/util.Response'
+      summary: Get a single role
+      tags:
+      - roles
+    put:
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: role_name
+        in: body
+        name: role_name
+        required: true
+        schema:
+          type: string
+      - description: remark
+        in: body
+        name: remark
+        required: true
+        schema:
+          type: string
+      - description: menu
+        in: body
+        name: menu
+        required: true
+        schema:
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"data":{"id":1, "role_name":"x", "remark": "",
+            "menu": []},"message":"ok"}'
+          schema:
+            $ref: '#/definitions/util.Response'
+      summary: Update a single role
+      tags:
+      - roles
+  /api/v1/users:
+    get:
+      parameters:
+      - description: page
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: limit
+        in: query
+        name: limit
+        required: true
+        type: integer
+      - description: key
+        in: query
+        name: key
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"data":{"list":[], "limit":10, "page":1, "total":100},"message":"ok"}'
+          schema:
+            $ref: '#/definitions/util.Response'
+      summary: Get user list
+      tags:
+      - users
+    post:
+      parameters:
+      - description: username
+        in: body
+        name: username
+        required: true
+        schema:
+          type: string
+      - description: email
+        in: body
+        name: email
+        required: true
+        schema:
+          type: string
+      - description: roles
+        in: body
+        name: roles
+        required: true
+        schema:
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"data":{"id":1, "username":"x", "email": "", "mobile":
+            "", "state":1, "roles": []},"message":"ok"}'
+          schema:
+            $ref: '#/definitions/util.Response'
+      summary: Create a single user
+      tags:
+      - users
+  /api/v1/users/{id}:
+    delete:
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"data":{"id":1, "username":"x", "email": "", "mobile":
+            "", "state":1, "roles": []},"message":"ok"}'
+          schema:
+            $ref: '#/definitions/util.Response'
+      summary: Delete a single user
+      tags:
+      - users
+    get:
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"data":{"id":1, "username":"x", "email": "", "mobile":
+            "", "state":1, "roles": []},"message":"ok"}'
+          schema:
+            $ref: '#/definitions/util.Response'
+      summary: Get a single user
+      tags:
+      - users
+    put:
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: username
+        in: body
+        name: username
+        required: true
+        schema:
+          type: string
+      - description: email
+        in: body
+        name: email
+        required: true
+        schema:
+          type: string
+      - description: roles
+        in: body
+        name: roles
+        required: true
+        schema:
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"data":{"id":1, "username":"x", "email": "", "mobile":
+            "", "state":1, "roles": []},"message":"ok"}'
+          schema:
+            $ref: '#/definitions/util.Response'
+      summary: Update a single user
+      tags:
+      - users
+swagger: "2.0"

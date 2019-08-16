@@ -11,8 +11,8 @@ type Gin struct {
 }
 
 type Response struct {
-	Code    int         `json:"code"`
-	Message string      `json:"message"`
+	Code    int         `json:"code" example:"200"`
+	Message string      `json:"message" example:"ok"`
 	Data    interface{} `json:"data"`
 }
 

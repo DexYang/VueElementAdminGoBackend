@@ -3,6 +3,10 @@ package routers
 import (
 	"github.com/gin-gonic/gin"
 
+	_ "github.com/DeluxeYang/VueElementAdminGoBackend/docs"
+	ginSwagger "github.com/swaggo/gin-swagger"
+	"github.com/swaggo/gin-swagger/swaggerFiles"
+
 	"github.com/DeluxeYang/VueElementAdminGoBackend/middleware/jwt"
 	"github.com/DeluxeYang/VueElementAdminGoBackend/middleware/permission"
 	"github.com/DeluxeYang/VueElementAdminGoBackend/pkg/setting"
@@ -18,6 +22,8 @@ func InitRouter() *gin.Engine {
 	r.Use(gin.Recovery())
 
 	gin.SetMode(setting.RunMode)
+
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	r.POST("/api/v1/auth", api.GetAuth)
 

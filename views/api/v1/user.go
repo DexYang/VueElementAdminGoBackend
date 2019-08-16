@@ -11,6 +11,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary Get user info
+// @Produce  json
+// @Success 200 {object} util.Response "{"code":200,"data":{"menus":[], "username":"x"},"message":"ok"}"
+// @Router /api/v1/info [get]
 func GetUserInfo(c *gin.Context) {
 	appG := util.Gin{C: c}
 	data := make(map[string]interface{})
@@ -34,6 +38,14 @@ func GetUserInfo(c *gin.Context) {
 	appG.Response(e.Success, data)
 }
 
+// @Summary Get user list
+// @Produce  json
+// @Tags users
+// @Param page query int true "page"
+// @Param limit query int true "limit"
+// @Param key query string true "key"
+// @Success 200 {object} util.Response "{"code":200,"data":{"list":[], "limit":10, "page":1, "total":100},"message":"ok"}"
+// @Router /api/v1/users [get]
 func GetUsers(c *gin.Context) {
 	appG := util.Gin{C: c}
 
@@ -60,6 +72,12 @@ func GetUsers(c *gin.Context) {
 	})
 }
 
+// @Summary Get a single user
+// @Produce  json
+// @Tags users
+// @Param id path int true "ID"
+// @Success 200 {object} util.Response "{"code":200,"data":{"id":1, "username":"x", "email": "", "mobile": "", "state":1, "roles": []},"message":"ok"}"
+// @Router /api/v1/users/{id} [get]
 func GetUser(c *gin.Context) {
 	appG := util.Gin{C: c}
 	id := com.StrTo(c.Param("id")).MustInt()
@@ -78,6 +96,14 @@ func GetUser(c *gin.Context) {
 	appG.Response(e.Success, user)
 }
 
+// @Summary Create a single user
+// @Produce  json
+// @Tags users
+// @Param username body string true "username"
+// @Param email body string true "email"
+// @Param roles body array true "roles"
+// @Success 200 {object} util.Response "{"code":200,"data":{"id":1, "username":"x", "email": "", "mobile": "", "state":1, "roles": []},"message":"ok"}"
+// @Router /api/v1/users [post]
 func AddUser(c *gin.Context) {
 	appG := util.Gin{C: c}
 
@@ -124,6 +150,12 @@ func AddUser(c *gin.Context) {
 	appG.Response(e.Success, resUserVO)
 }
 
+// @Summary Delete a single user
+// @Produce  json
+// @Tags users
+// @Param id path int true "ID"
+// @Success 200 {object} util.Response "{"code":200,"data":{"id":1, "username":"x", "email": "", "mobile": "", "state":1, "roles": []},"message":"ok"}"
+// @Router /api/v1/users/{id} [delete]
 func DeleteUser(c *gin.Context) {
 	appG := util.Gin{C: c}
 	id := com.StrTo(c.Param("id")).MustInt()
@@ -161,6 +193,15 @@ func UserIDCheck(id int) int {
 	return e.Success
 }
 
+// @Summary Update a single user
+// @Produce  json
+// @Tags users
+// @Param id path int true "ID"
+// @Param username body string true "username"
+// @Param email body string true "email"
+// @Param roles body array true "roles"
+// @Success 200 {object} util.Response "{"code":200,"data":{"id":1, "username":"x", "email": "", "mobile": "", "state":1, "roles": []},"message":"ok"}"
+// @Router /api/v1/users/{id} [put]
 func EditUser(c *gin.Context) {
 	appG := util.Gin{C: c}
 	id := com.StrTo(c.Param("id")).MustInt()

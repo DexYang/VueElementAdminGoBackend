@@ -15,6 +15,12 @@ type auth struct {
 	Password string `valid:"Required; MaxSize(50)" json:"password" binding:"required"`
 }
 
+// @Summary login
+// @Produce  json
+// @Param username body string true "username"
+// @Param password body string true "password"
+// @Success 200 {object} util.Response "{"code":200,"data":{"token": ""},"message":"ok"}"
+// @Router /api/v1/auth [post]
 func GetAuth(c *gin.Context) {
 	appG := util.Gin{C: c}
 

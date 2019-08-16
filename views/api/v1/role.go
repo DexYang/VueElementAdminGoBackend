@@ -10,6 +10,14 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary Get role list
+// @Produce  json
+// @Tags roles
+// @Param page query int true "page"
+// @Param limit query int true "limit"
+// @Param key query string true "key"
+// @Success 200 {object} util.Response "{"code":200,"data":{"list":[], "limit":10, "page":1, "total":100},"message":"ok"}"
+// @Router /api/v1/roles [get]
 func GetRoles(c *gin.Context) {
 	appG := util.Gin{C: c}
 
@@ -54,6 +62,12 @@ func RoleIDCheck(id int) int {
 	return e.Success
 }
 
+// @Summary Get a single role
+// @Produce  json
+// @Tags roles
+// @Param id path int true "ID"
+// @Success 200 {object} util.Response "{"code":200,"data":{"id":1, "role_name":"x", "remark": "", "menu": []},"message":"ok"}"
+// @Router /api/v1/roles/{id} [get]
 func GetRole(c *gin.Context) {
 	appG := util.Gin{C: c}
 	id := com.StrTo(c.Param("id")).MustInt()
@@ -72,6 +86,12 @@ func GetRole(c *gin.Context) {
 	appG.Response(e.Success, user)
 }
 
+// @Summary Delete a single role
+// @Produce  json
+// @Tags roles
+// @Param id path int true "ID"
+// @Success 200 {object} util.Response "{"code":200,"data":{"id":1, "role_name":"x", "remark": "", "menu": []},"message":"ok"}"
+// @Router /api/v1/roles/{id} [delete]
 func DeleteRole(c *gin.Context) {
 	appG := util.Gin{C: c}
 	id := com.StrTo(c.Param("id")).MustInt()
@@ -90,6 +110,14 @@ func DeleteRole(c *gin.Context) {
 	appG.Response(e.Success, user)
 }
 
+// @Summary Create a single role
+// @Produce  json
+// @Tags roles
+// @Param role_name body string true "role_name"
+// @Param remark body string true "remark"
+// @Param menu body array true "menu"
+// @Success 200 {object} util.Response "{"code":200,"data":{"id":1, "role_name":"x", "remark": "", "menu": []},"message":"ok"}"
+// @Router /api/v1/roles [post]
 func AddRole(c *gin.Context) {
 	appG := util.Gin{C: c}
 
@@ -126,6 +154,15 @@ func AddRole(c *gin.Context) {
 	appG.Response(e.Success, resRoleVO)
 }
 
+// @Summary Update a single role
+// @Produce  json
+// @Tags roles
+// @Param id path int true "ID"
+// @Param role_name body string true "role_name"
+// @Param remark body string true "remark"
+// @Param menu body array true "menu"
+// @Success 200 {object} util.Response "{"code":200,"data":{"id":1, "role_name":"x", "remark": "", "menu": []},"message":"ok"}"
+// @Router /api/v1/roles/{id} [put]
 func EditRole(c *gin.Context) {
 	appG := util.Gin{C: c}
 	id := com.StrTo(c.Param("id")).MustInt()
