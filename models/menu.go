@@ -7,28 +7,28 @@ import (
 type Menu struct {
 	Model
 
-	ParentID uint 		`gorm:"default:0" json:"parent_id"`
+	ParentID uint `gorm:"default:0" json:"parent_id"`
 
-	MenuName string 	`json:"menu_name"`
-	MenuType int 		`json:"menu_type"`
-	Remark string 		`json:"remark"`
-	Component string 	`json:"component"`
+	MenuName  string `json:"menu_name"`
+	MenuType  int    `json:"menu_type"`
+	Remark    string `json:"remark"`
+	Component string `json:"component"`
 
 	PermissionTag string `json:"permission_tag"`
 
-	Path string 		`json:"path"`
-	Icon string 		`json:"icon"`
-	Order int 			`json:"order"`
+	Path  string `json:"path"`
+	Icon  string `json:"icon"`
+	Order int    `json:"order"`
 
-	Children []Menu 	`gorm:"-"`
+	Children []Menu `gorm:"-"`
 
-	Role []Role 		`gorm:"many2many:role_menu;"`  // 用户与角色多对多
+	Role []Role `gorm:"many2many:role_menu;"` // 用户与角色多对多
 }
 
 func GetMenu(parentID int) ([]Menu, error) {
 	var (
 		menu []Menu
-		err error
+		err  error
 	)
 
 	err = db.Where("parent_id = ?", parentID).Order("order").Find(&menu).Error
@@ -39,7 +39,6 @@ func GetMenu(parentID int) ([]Menu, error) {
 
 	return menu, nil
 }
-
 
 func SetAllMenuState(state int) error {
 	return db.Model(&Menu{}).Update("state", state).Error
@@ -126,14 +125,14 @@ func CheckPermissionByRole(roleIds []uint, permissionTag string, permissionTypeL
 
 	var res result
 
-	err := db.Raw("SELECT menu.id FROM " +
-		tablePrefix+"menu as menu, " +
-		tablePrefix+"role_menu as role_menu " +
-		"WHERE role_menu.role_id in (?) " +
-		"AND menu.id = role_menu.menu_id " +
-		"AND menu.permission_tag = ? " +
+	err := db.Raw("SELECT menu.id FROM "+
+		tablePrefix+"menu as menu, "+
+		tablePrefix+"role_menu as role_menu "+
+		"WHERE role_menu.role_id in (?) "+
+		"AND menu.id = role_menu.menu_id "+
+		"AND menu.permission_tag = ? "+
 		"AND menu.menu_type in (?)", roleIds, permissionTag, permissionTypeList).Scan(&res).Error
-	if err != nil && err != gorm.ErrRecordNotFound{
+	if err != nil && err != gorm.ErrRecordNotFound {
 		return false, err
 	}
 
@@ -147,12 +146,11 @@ func CheckPermissionByRole(roleIds []uint, permissionTag string, permissionTypeL
 func GetMenuByRole(parentID int, roleIds []uint) ([]Menu, error) {
 	var menu []Menu
 
-	err := db.Raw("SELECT menu.* FROM " +
-		tablePrefix+"menu as menu, " +
-		tablePrefix+"role_menu as role_menu " +
-		"WHERE role_menu.role_id in (?) " +
-		"AND menu.id = role_menu.menu_id " +
-		"AND menu.parent_id = ?", roleIds, parentID).Order("order").Scan(&menu).Error
+	err := db.Raw("SELECT DISTINCT menu.* FROM "+
+		tablePrefix+"menu as menu INNER JOIN "+
+		tablePrefix+"role_menu as role_menu ON "+
+		"menu.id = role_menu.menu_id WHERE "+
+		"role_menu.role_id in (?) AND menu.parent_id = ?", roleIds, parentID).Order("order").Scan(&menu).Error
 
 	if err != nil && err != gorm.ErrRecordNotFound {
 		return nil, err
