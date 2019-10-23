@@ -1,9 +1,9 @@
 package role_service
 
 import (
-	"github.com/DeluxeYang/VueElementAdminGoBackend/models"
-	"github.com/DeluxeYang/VueElementAdminGoBackend/pkg/util"
-	"github.com/DeluxeYang/VueElementAdminGoBackend/service/menu_service"
+	"VueElementAdminGoBackend/models"
+	"VueElementAdminGoBackend/pkg/util"
+	"VueElementAdminGoBackend/service/menu_service"
 )
 
 type RoleVO struct {

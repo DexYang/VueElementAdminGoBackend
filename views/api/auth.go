@@ -5,9 +5,9 @@ import (
 	"github.com/gin-gonic/gin"
 	"log"
 
-	"github.com/DeluxeYang/VueElementAdminGoBackend/models"
-	"github.com/DeluxeYang/VueElementAdminGoBackend/pkg/e"
-	"github.com/DeluxeYang/VueElementAdminGoBackend/pkg/util"
+	"VueElementAdminGoBackend/models"
+	"VueElementAdminGoBackend/pkg/e"
+	"VueElementAdminGoBackend/pkg/util"
 )
 
 type auth struct {

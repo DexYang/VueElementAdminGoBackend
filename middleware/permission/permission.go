@@ -1,9 +1,9 @@
 package permission
 
 import (
-	"github.com/DeluxeYang/VueElementAdminGoBackend/pkg/e"
-	"github.com/DeluxeYang/VueElementAdminGoBackend/pkg/util"
-	"github.com/DeluxeYang/VueElementAdminGoBackend/service/menu_service"
+	"VueElementAdminGoBackend/pkg/e"
+	"VueElementAdminGoBackend/pkg/util"
+	"VueElementAdminGoBackend/service/menu_service"
 	"github.com/Unknwon/com"
 	"github.com/gin-gonic/gin"
 )

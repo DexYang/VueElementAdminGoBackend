@@ -3,15 +3,15 @@ package routers
 import (
 	"github.com/gin-gonic/gin"
 
-	_ "github.com/DeluxeYang/VueElementAdminGoBackend/docs"
+	_ "VueElementAdminGoBackend/docs"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"github.com/swaggo/gin-swagger/swaggerFiles"
 
-	"github.com/DeluxeYang/VueElementAdminGoBackend/middleware/jwt"
-	"github.com/DeluxeYang/VueElementAdminGoBackend/middleware/permission"
-	"github.com/DeluxeYang/VueElementAdminGoBackend/pkg/setting"
-	"github.com/DeluxeYang/VueElementAdminGoBackend/views/api"
-	"github.com/DeluxeYang/VueElementAdminGoBackend/views/api/v1"
+	"VueElementAdminGoBackend/middleware/jwt"
+	"VueElementAdminGoBackend/middleware/permission"
+	"VueElementAdminGoBackend/pkg/setting"
+	"VueElementAdminGoBackend/views/api"
+	"VueElementAdminGoBackend/views/api/v1"
 )
 
 func InitRouter() *gin.Engine {

@@ -1,8 +1,8 @@
 package util
 
 import (
+	"VueElementAdminGoBackend/pkg/e"
 	"fmt"
-	"github.com/DeluxeYang/VueElementAdminGoBackend/pkg/e"
 	"github.com/astaxie/beego/validation"
 	"github.com/gin-gonic/gin"
 )

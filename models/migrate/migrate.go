@@ -7,8 +7,8 @@ import (
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 
-	"github.com/DeluxeYang/VueElementAdminGoBackend/models"
-	"github.com/DeluxeYang/VueElementAdminGoBackend/pkg/setting"
+	"VueElementAdminGoBackend/models"
+	"VueElementAdminGoBackend/pkg/setting"
 )
 
 var db *gorm.DB

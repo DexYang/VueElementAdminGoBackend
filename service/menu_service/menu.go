@@ -1,8 +1,8 @@
 package menu_service
 
 import (
-	"github.com/DeluxeYang/VueElementAdminGoBackend/models"
-	"github.com/DeluxeYang/VueElementAdminGoBackend/pkg/util"
+	"VueElementAdminGoBackend/models"
+	"VueElementAdminGoBackend/pkg/util"
 )
 
 type MenuVO struct {

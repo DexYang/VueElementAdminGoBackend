@@ -1,7 +1,7 @@
 package util
 
 import (
-	"github.com/DeluxeYang/VueElementAdminGoBackend/pkg/e"
+	"VueElementAdminGoBackend/pkg/e"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )

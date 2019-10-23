@@ -5,7 +5,7 @@ import (
 
 	"github.com/dgrijalva/jwt-go"
 
-	"github.com/DeluxeYang/VueElementAdminGoBackend/pkg/setting"
+	"VueElementAdminGoBackend/pkg/setting"
 )
 
 var jwtSecret = []byte(setting.JwtSecret)

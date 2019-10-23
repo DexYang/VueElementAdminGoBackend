@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/DeluxeYang/VueElementAdminGoBackend/routers"
+	"VueElementAdminGoBackend/routers"
 
-	"github.com/DeluxeYang/VueElementAdminGoBackend/pkg/setting"
+	"VueElementAdminGoBackend/pkg/setting"
 )
 
 func main() {
