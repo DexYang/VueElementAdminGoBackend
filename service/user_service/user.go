@@ -11,7 +11,7 @@ type UserVO struct {
 	State int  `json:"state"`
 
 	Username string `json:"username"`
-	Password string `json:"password"`
+	Password string `json:"-"`
 	Email    string `json:"email"`
 	Mobile   string `json:"mobile"`
 
@@ -78,32 +78,6 @@ func ExistUserByEmail(email string, id int) (bool, error) {
 	return models.ExistUserByEmail(email, id)
 }
 
-func AddUser(userVO *UserVO) (*UserVO, error) {
-	roleList, err := role_service.GetRoleListByIDList(userVO.Roles)
-	if err != nil {
-		return nil, err
-	}
-
-	var user models.User
-
-	userVO.Roles = nil
-	if util.Mapping(&userVO, &user) != nil {
-		return nil, err
-	}
-	user.Roles = roleList
-
-	if err := models.AddUser(&user); err != nil {
-		return nil, err
-	}
-
-	resUserVO, err := GetUser(int(user.ID))
-	if err != nil {
-		return nil, err
-	}
-
-	return resUserVO, nil
-}
-
 func DeleteUser(id int) (*UserVO, error) {
 	user, err := GetUser(id)
 	if err != nil {
@@ -116,16 +90,28 @@ func DeleteUser(id int) (*UserVO, error) {
 	return user, nil
 }
 
-func EditUser(id int, userVO *UserVO) (*UserVO, error) {
-	roleList, err := role_service.GetRoleListByIDList(userVO.Roles)
+type UserRequest struct {
+	ID    uint `json:"id"`
+	State int  `json:"state"`
+
+	Username string `json:"username"`
+	Password string `json:"password"`
+	Email    string `json:"email"`
+	Mobile   string `json:"mobile"`
+
+	Roles []uint `json:"roles"` // 用户与角色多对多
+}
+
+func EditUser(id int, userRq *UserRequest) (*UserVO, error) {
+	roleList, err := role_service.GetRoleListByIDList(userRq.Roles)
 	if err != nil {
 		return nil, err
 	}
 
 	var user models.User
 
-	userVO.Roles = nil
-	if util.Mapping(&userVO, &user) != nil {
+	userRq.Roles = nil
+	if util.Mapping(&userRq, &user) != nil {
 		return nil, err
 	}
 	user.Roles = roleList
@@ -135,6 +121,32 @@ func EditUser(id int, userVO *UserVO) (*UserVO, error) {
 	}
 
 	resUserVO, err := GetUser(id)
+	if err != nil {
+		return nil, err
+	}
+
+	return resUserVO, nil
+}
+
+func AddUser(userRq *UserRequest) (*UserVO, error) {
+	roleList, err := role_service.GetRoleListByIDList(userRq.Roles)
+	if err != nil {
+		return nil, err
+	}
+
+	var user models.User
+
+	userRq.Roles = nil
+	if util.Mapping(&userRq, &user) != nil {
+		return nil, err
+	}
+	user.Roles = roleList
+
+	if err := models.AddUser(&user); err != nil {
+		return nil, err
+	}
+
+	resUserVO, err := GetUser(int(user.ID))
 	if err != nil {
 		return nil, err
 	}

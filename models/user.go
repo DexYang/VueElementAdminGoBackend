@@ -6,29 +6,29 @@ import (
 )
 
 type User struct {
-	ID        	uint 		`gorm:"primary_key;AUTO_INCREMENT"`
+	ID uint `gorm:"primary_key;AUTO_INCREMENT"`
 
-	CreatedAt 	time.Time
-	UpdatedAt 	time.Time
-	DeletedAt 	*time.Time
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	DeletedAt *time.Time
 
-	State 		int			`gorm:"default:0"`
+	State int `gorm:"default:0"`
 
-	Username 	string 		`gorm:"type:varchar(100);not null;index"`
-	Password 	string
-	Email 		string 		`gorm:"type:varchar(100);not null;index"`
-	Mobile 		string
+	Username string `gorm:"type:varchar(100);not null;index"`
+	Password string
+	Email    string `gorm:"type:varchar(100);not null;index"`
+	Mobile   string
 
-	Roles []Role 		`gorm:"many2many:user_role;"`  // 用户与角色多对多
+	Roles []Role `gorm:"many2many:user_role;"` // 用户与角色多对多
 }
 
 /**
   验证用户名密码
- */
+*/
 func CheckUser(username, password string) bool {
 	var user User
 
-	db.Select("id").Where(User{Username : username, Password : password}).First(&user)
+	db.Select("id").Where(User{Username: username, Password: password}).First(&user)
 	if user.ID > 0 {
 		return true
 	}
@@ -39,7 +39,7 @@ func CheckUser(username, password string) bool {
 func GetUsers(offset int, limit int, key string) ([]User, error) {
 	var (
 		users []User
-		err error
+		err   error
 	)
 
 	err = db.
@@ -147,7 +147,6 @@ func ExistUserByEmail(email string, id int) (bool, error) {
 	return false, nil
 }
 
-
 func DeleteUser(id int) error {
 	var user User
 
@@ -179,7 +178,9 @@ func UpdateUser(id int, user *User) error {
 	db.Where("id = ?", id).First(&originUser).Association("Roles").Clear()
 
 	originUser.Username = user.Username
-	originUser.Password = user.Password
+	if user.Password != "" {
+		originUser.Password = user.Password
+	}
 	originUser.Email = user.Email
 	originUser.Mobile = user.Mobile
 	originUser.State = user.State
@@ -207,4 +208,3 @@ func GetUserByUsername(username string) (*User, error) {
 
 	return &user, nil
 }
-

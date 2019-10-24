@@ -107,7 +107,7 @@ func GetUser(c *gin.Context) {
 func AddUser(c *gin.Context) {
 	appG := util.Gin{C: c}
 
-	userVO := user_service.UserVO{}
+	userVO := user_service.UserRequest{}
 
 	code := util.BindAndValid(c, &userVO) // 数据验证
 	if code != e.Success {
@@ -211,7 +211,7 @@ func EditUser(c *gin.Context) {
 		return
 	}
 
-	userVO := user_service.UserVO{}
+	userVO := user_service.UserRequest{}
 
 	code := util.BindAndValid(c, &userVO) // 数据验证
 	if code != e.Success {
