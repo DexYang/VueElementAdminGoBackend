@@ -16,7 +16,7 @@ func JWT() gin.HandlerFunc {
 		var code int
 
 		code = e.Success
-		token := c.GetHeader("token") // todo
+		token := c.GetHeader("Access-Token") // todo
 		if token == "" {
 			code = e.WarningNotLogin
 		} else {
