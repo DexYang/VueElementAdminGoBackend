@@ -169,6 +169,9 @@ func DeleteUser(c *gin.Context) {
 	if err != nil {
 		appG.Response(e.ErrorDeleteUser, nil)
 		return
+	} else if user == nil {
+		appG.Response(e.WarningCannotDeleteAdmin, nil)
+		return
 	}
 
 	appG.Response(e.Success, user)

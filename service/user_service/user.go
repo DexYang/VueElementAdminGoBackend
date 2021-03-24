@@ -79,15 +79,23 @@ func ExistUserByEmail(email string, id int) (bool, error) {
 }
 
 func DeleteUser(id int) (*UserVO, error) {
-	user, err := GetUser(id)
+
+	user, err := models.DeleteUser(id)
+	if err != nil {
+		return nil, err
+	}
+	if user == nil {
+		return nil, nil
+	}
+
+	var userVO UserVO
+
+	err = util.Mapping(&user, &userVO)
 	if err != nil {
 		return nil, err
 	}
 
-	if err = models.DeleteUser(id); err != nil {
-		return nil, err
-	}
-	return user, nil
+	return &userVO, nil
 }
 
 type UserRequest struct {

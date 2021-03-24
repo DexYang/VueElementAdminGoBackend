@@ -1,7 +1,12 @@
 package models
 
 import (
+	"VueElementAdminGoBackend/pkg/setting"
+	"crypto/hmac"
+	"crypto/sha256"
+	"encoding/hex"
 	"github.com/jinzhu/gorm"
+	"log"
 	"time"
 )
 
@@ -18,8 +23,25 @@ type User struct {
 	Password string
 	Email    string `gorm:"type:varchar(100);not null;index"`
 	Mobile   string
+	IsAdmin  bool
 
 	Roles []Role `gorm:"many2many:user_role;"` // 用户与角色多对多
+}
+
+func HmacSha256(key, data string) string {
+	hash := hmac.New(sha256.New, []byte(key)) //创建对应的sha256哈希加密算法
+	hash.Write([]byte(data))
+	return hex.EncodeToString(hash.Sum([]byte("")))
+}
+
+func Encrypt(data string) string {
+	sec, err := setting.Cfg.GetSection("salt") // 定位到app.ini的database区
+	if err != nil {
+		log.Fatal(2, "Fail to get section 'database': %v", err)
+	}
+
+	salt := sec.Key("SALT").String() // 数据库类型mysql
+	return HmacSha256(salt, data)
 }
 
 /**
@@ -27,8 +49,7 @@ type User struct {
 */
 func CheckUser(username, password string) bool {
 	var user User
-
-	db.Select("id").Where(User{Username: username, Password: password}).First(&user)
+	db.Select("id").Where(User{Username: username, Password: Encrypt(password)}).First(&user)
 	if user.ID > 0 {
 		return true
 	}
@@ -147,24 +168,29 @@ func ExistUserByEmail(email string, id int) (bool, error) {
 	return false, nil
 }
 
-func DeleteUser(id int) error {
+func DeleteUser(id int) (*User, error) {
 	var user User
 
 	err := db.Where("id = ?", id).First(&user).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
-		return err
+		return nil, err
+	}
+
+	if user.IsAdmin == true {
+		return nil, nil
 	}
 
 	db.Model(&user).Association("Roles").Clear()
 
 	if err := db.Unscoped().Where("id = ?", id).Delete(&user).Error; err != nil {
-		return err
+		return nil, err
 	}
 
-	return nil
+	return &user, nil
 }
 
 func AddUser(user *User) error {
+	user.Password = Encrypt(user.Password)
 	if err := db.Create(&user).Error; err != nil {
 		return err
 	}
@@ -179,7 +205,7 @@ func UpdateUser(id int, user *User) error {
 
 	originUser.Username = user.Username
 	if user.Password != "" {
-		originUser.Password = user.Password
+		originUser.Password = Encrypt(user.Password)
 	}
 	originUser.Email = user.Email
 	originUser.Mobile = user.Mobile

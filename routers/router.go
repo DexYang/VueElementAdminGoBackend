@@ -25,7 +25,7 @@ func InitRouter() *gin.Engine {
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-	r.POST("/api/v1/auth", api.GetAuth)
+	r.POST("/api/v1/login", api.GetAuth)
 
 	apiV1 := r.Group("/api/v1")
 	apiV1.Use(jwt.JWT())
