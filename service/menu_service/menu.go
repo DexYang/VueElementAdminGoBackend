@@ -12,6 +12,7 @@ type MenuVO struct {
 	MenuType  int    `json:"menu_type"`
 	Remark    string `json:"remark"`
 	Component string `json:"component"`
+	Hidden    bool   `json:"hidden"`
 
 	PermissionTag string `json:"permission_tag"`
 	Path          string `json:"path"`
