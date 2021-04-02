@@ -35,7 +35,7 @@ func GetUserList(offset int, limit int, key string) ([]UserVO, error) {
 	return usersVO, nil
 }
 
-func GetUserTotal(key string) (int, error) {
+func GetUserTotal(key string) (int64, error) {
 	count, err := models.GetUserTotal(key)
 	if err != nil {
 		return 0, err

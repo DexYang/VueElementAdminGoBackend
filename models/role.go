@@ -1,27 +1,27 @@
 package models
 
 import (
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 	"time"
 )
 
 type Role struct {
-	ID        	uint 		`gorm:"primary_key;AUTO_INCREMENT"`
+	ID uint `gorm:"primary_key;AUTO_INCREMENT"`
 
-	CreatedAt 	time.Time
-	UpdatedAt 	time.Time
-	DeletedAt 	*time.Time
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	DeletedAt *time.Time
 
-	State 		int			`gorm:"default:0"`
+	State int `gorm:"default:0"`
 
-	RoleName string 		`gorm:"type:varchar(100);not null;index" json:"role_name"`
-	Remark string
+	RoleName string `gorm:"type:varchar(100);not null;index" json:"role_name"`
+	Remark   string
 
-	Menu []Menu 			`gorm:"many2many:role_menu;"`  // 用户与角色多对多
+	Menu []Menu `gorm:"many2many:role_menu;"` // 用户与角色多对多
 }
 
 func ExistRoles(ids []uint) (bool, error) {
-	var count int
+	var count int64
 
 	err := db.Model(&User{}).Where("id in (?)", ids).Count(&count).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
@@ -50,7 +50,7 @@ func GetRoleListByIDList(ids []uint) ([]Role, error) {
 func GetRoles(offset int, limit int, key string) ([]Role, error) {
 	var (
 		roles []Role
-		err error
+		err   error
 	)
 
 	err = db.
@@ -68,8 +68,8 @@ func GetRoles(offset int, limit int, key string) ([]Role, error) {
 	return roles, nil
 }
 
-func GetRoleTotal(key string) (int, error) {
-	var count int
+func GetRoleTotal(key string) (int64, error) {
+	var count int64
 
 	err := db.
 		Model(&Role{}).
@@ -93,7 +93,7 @@ func GetRole(id int) (*Role, error) {
 		return nil, err
 	}
 
-	err = db.Model(&role).Related(&role.Menu, "Menu").Error
+	err = db.Model(&role).Association("Menu").Find(&role.Menu)
 	if err != nil && err != gorm.ErrRecordNotFound {
 		return nil, err
 	}
@@ -154,7 +154,6 @@ func ExistRoleByRoleName(roleName string, id int) (bool, error) {
 	return false, nil
 }
 
-
 func AddRole(role *Role) error {
 	if err := db.Create(&role).Error; err != nil {
 		return err
@@ -166,12 +165,12 @@ func AddRole(role *Role) error {
 func UpdateRole(id int, role *Role) error {
 	var originRole Role
 
-	db.Where("id = ?", id).First(&originRole).Association("Menu").Clear()
+	_ = db.Where("id = ?", id).First(&originRole).Association("Menu").Clear()
 
 	if err := db.
 		Model(&originRole).
 		Where("id = ?", id).
-		Update(&role).
+		Updates(&role).
 		Error; err != nil {
 		return err
 	}

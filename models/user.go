@@ -5,7 +5,7 @@ import (
 	"crypto/hmac"
 	"crypto/sha256"
 	"encoding/hex"
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 	"log"
 	"time"
 )
@@ -78,8 +78,8 @@ func GetUsers(offset int, limit int, key string) ([]User, error) {
 	return users, nil
 }
 
-func GetUserTotal(key string) (int, error) {
-	var count int
+func GetUserTotal(key string) (int64, error) {
+	var count int64
 
 	err := db.
 		Model(&User{}).
@@ -118,7 +118,7 @@ func GetUser(id int) (*User, error) {
 		return nil, err
 	}
 
-	err = db.Model(&user).Related(&user.Roles, "Roles").Error
+	err = db.Model(&user).Association("Roles").Find(&user.Roles)
 	if err != nil && err != gorm.ErrRecordNotFound {
 		return nil, err
 	}
@@ -180,7 +180,7 @@ func DeleteUser(id int) (*User, error) {
 		return nil, nil
 	}
 
-	db.Model(&user).Association("Roles").Clear()
+	_ = db.Model(&user).Association("Roles").Clear()
 
 	if err := db.Unscoped().Where("id = ?", id).Delete(&user).Error; err != nil {
 		return nil, err
@@ -201,7 +201,7 @@ func AddUser(user *User) error {
 func UpdateUser(id int, user *User) error {
 	var originUser User
 
-	db.Where("id = ?", id).First(&originUser).Association("Roles").Clear()
+	_ = db.Where("id = ?", id).First(&originUser).Association("Roles").Clear()
 
 	originUser.Username = user.Username
 	if user.Password != "" {
@@ -227,7 +227,7 @@ func GetUserByUsername(username string) (*User, error) {
 		return nil, err
 	}
 
-	err = db.Model(&user).Related(&user.Roles, "Roles").Error
+	err = db.Model(&user).Association("Roles").Find(&user.Roles)
 	if err != nil && err != gorm.ErrRecordNotFound {
 		return nil, err
 	}

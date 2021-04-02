@@ -8,15 +8,15 @@ import (
 type MenuVO struct {
 	ID uint `json:"id"`
 
-	MenuName  string `json:"menu_name"`
-	MenuType  int    `json:"menu_type"`
-	Remark    string `json:"remark"`
+	Name      string `json:"name"`
+	Type      int    `json:"type"`
+	Title     string `json:"title"`
 	Component string `json:"component"`
 	Hidden    bool   `json:"hidden"`
 
-	PermissionTag string `json:"permission_tag"`
-	Path          string `json:"path"`
-	Icon          string `json:"icon"`
+	Perms string `json:"perms"`
+	Path  string `json:"path"`
+	Icon  string `json:"icon"`
 
 	Children []MenuVO `json:"children"`
 }
@@ -46,7 +46,7 @@ func DFSGetMenu(parentID int) ([]models.Menu, error) {
 	}
 
 	for i := 0; i < len(menuList); i++ {
-		if menuList[i].MenuType < 2 { // 如果是目录
+		if menuList[i].Type < 2 { // 如果是目录
 			menuList[i].Children, _ = DFSGetMenu(int(menuList[i].ID))
 		} else {
 			menuList[i].Children = []models.Menu{} // no null
@@ -80,12 +80,12 @@ func SaveMenu(menuVOList []MenuVO) error {
 	return nil
 }
 
-func DFSSaveMenu(menuList []models.Menu, parentID uint, permissionTag string) error {
+func DFSSaveMenu(menuList []models.Menu, parentID uint, perms string) error {
 	for i := 0; i < len(menuList); i++ {
 		menuList[i].ParentID = parentID
 		menuList[i].Order = i
-		if permissionTag != "" { // 如果传来的permissionTag不为空，即当前menu是一个按键，需要继承上级页面的permissionTag
-			menuList[i].PermissionTag = permissionTag
+		if perms != "" { // 如果传来的permissionTag不为空，即当前menu是一个按键，需要继承上级页面的permissionTag
+			menuList[i].Perms = perms
 		}
 		// 查询是否存在该ID的menu
 		exist, err := models.ExistMenuByID(menuList[i].ID)
@@ -104,12 +104,12 @@ func DFSSaveMenu(menuList []models.Menu, parentID uint, permissionTag string) er
 			}
 		}
 		// 如果是目录，则往下递归
-		if menuList[i].MenuType == 0 { // 如果是目录，则permissionTag传为空，即下级菜单的permissionTag不受影响
+		if menuList[i].Type == 0 { // 如果是目录，则permissionTag传为空，即下级菜单的permissionTag不受影响
 			if err = DFSSaveMenu(menuList[i].Children, menuList[i].ID, ""); err != nil {
 				return err
 			}
-		} else if menuList[i].MenuType == 1 { // 如果是页面，则传送当前页面的permissionTag，即该页面下级按键继承当前permissionTag
-			if err = DFSSaveMenu(menuList[i].Children, menuList[i].ID, menuList[i].PermissionTag); err != nil {
+		} else if menuList[i].Type == 1 { // 如果是页面，则传送当前页面的permissionTag，即该页面下级按键继承当前permissionTag
+			if err = DFSSaveMenu(menuList[i].Children, menuList[i].ID, menuList[i].Perms); err != nil {
 				return err
 			}
 		}
@@ -142,9 +142,12 @@ func DFSGetMenuOfUser(parentID int, roleIds []uint) ([]models.Menu, error) {
 	if err != nil {
 		return nil, err
 	}
+	if menuList == nil {
+		return []models.Menu{}, nil
+	}
 
 	for i := 0; i < len(menuList); i++ {
-		if menuList[i].MenuType < 2 { // 如果是目录
+		if menuList[i].Type < 2 { // 如果是目录
 			menuList[i].Children, _ = DFSGetMenuOfUser(int(menuList[i].ID), roleIds)
 		} else {
 			menuList[i].Children = []models.Menu{} // no null

@@ -1,7 +1,7 @@
 package models
 
 import (
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 type Menu struct {
@@ -9,13 +9,13 @@ type Menu struct {
 
 	ParentID uint `gorm:"default:0" json:"parent_id"`
 
-	MenuName  string `json:"menu_name"`
-	MenuType  int    `json:"menu_type"`
-	Remark    string `json:"remark"`
+	Name      string `json:"name"`
+	Type      int    `json:"type"`
+	Title     string `json:"title"`
 	Component string `json:"component"`
 	Hidden    bool   `json:"hidden"`
 
-	PermissionTag string `json:"permission_tag"`
+	Perms string `json:"perms"`
 
 	Path  string `json:"path"`
 	Icon  string `json:"icon"`
@@ -32,9 +32,9 @@ func GetMenu(parentID int) ([]Menu, error) {
 		err  error
 	)
 
-	err = db.Where("parent_id = ?", parentID).Order("order").Find(&menu).Error
+	result := db.Where("parent_id = ?", parentID).Order("'order'").Find(&menu)
 
-	if err != nil && err != gorm.ErrRecordNotFound {
+	if result.Error != nil && result.Error != gorm.ErrRecordNotFound {
 		return nil, err
 	}
 
@@ -83,7 +83,7 @@ func DeleteAllMenuStateEqZero() error {
 	}
 
 	for i := 0; i < len(menus); i++ {
-		db.Model(&menus[i]).Association("Role").Clear()
+		_ = db.Model(&menus[i]).Association("Role").Clear()
 	}
 
 	if err := db.Unscoped().Where("state = 0").Delete(&Menu{}).Error; err != nil {
@@ -94,7 +94,7 @@ func DeleteAllMenuStateEqZero() error {
 }
 
 func ExistMenuList(ids []uint) (bool, error) {
-	var count int
+	var count int64
 
 	err := db.Model(&Menu{}).Where("id in (?)", ids).Count(&count).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
@@ -131,8 +131,8 @@ func CheckPermissionByRole(roleIds []uint, permissionTag string, permissionTypeL
 		tablePrefix+"role_menu as role_menu "+
 		"WHERE role_menu.role_id in (?) "+
 		"AND menu.id = role_menu.menu_id "+
-		"AND menu.permission_tag = ? "+
-		"AND menu.menu_type in (?)", roleIds, permissionTag, permissionTypeList).Scan(&res).Error
+		"AND menu.perms = ? "+
+		"AND menu.type in (?)", roleIds, permissionTag, permissionTypeList).Scan(&res).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
 		return false, err
 	}

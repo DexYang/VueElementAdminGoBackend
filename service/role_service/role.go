@@ -41,7 +41,7 @@ func GetRoleList(offset int, limit int, key string) ([]RoleVO, error) {
 	return rolesVO, nil
 }
 
-func GetRoleTotal(key string) (int, error) {
+func GetRoleTotal(key string) (int64, error) {
 	count, err := models.GetRoleTotal(key)
 	if err != nil {
 		return 0, err

@@ -16,6 +16,8 @@ const (
 	Export   = 6
 )
 
+var Perms = map[string]int{"Retrieve": 2, "Create": 3, "Update": 4, "Delete": 5, "Export": 6}
+
 func Permission(path string, permission ...int) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		appG := util.Gin{C: c}

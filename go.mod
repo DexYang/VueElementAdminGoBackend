@@ -11,7 +11,8 @@ require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/gin-gonic/gin v1.4.0
 	github.com/go-ini/ini v1.49.0
-	github.com/jinzhu/gorm v1.9.11
+	gorm.io/gorm v1.21.6
+	gorm.io/driver/sqlite v1.1.4
 	github.com/json-iterator/go v1.1.7
 	github.com/swaggo/gin-swagger v1.2.0
 	github.com/swaggo/swag v1.6.3

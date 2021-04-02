@@ -1,6 +1,7 @@
 package v1
 
 import (
+	"VueElementAdminGoBackend/middleware/permission"
 	"VueElementAdminGoBackend/pkg/e"
 	"VueElementAdminGoBackend/pkg/util"
 	"VueElementAdminGoBackend/service/menu_service"
@@ -28,6 +29,7 @@ func GetUserInfo(c *gin.Context) {
 			appG.Response(e.ErrorGetUserInfo, nil)
 			return
 		}
+		data["perms"] = permission.Perms
 		data["menus"] = menu
 		data["username"] = username
 	} else {
