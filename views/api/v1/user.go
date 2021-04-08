@@ -29,7 +29,7 @@ func GetUserInfo(c *gin.Context) {
 			appG.Response(e.ErrorGetUserInfo, nil)
 			return
 		}
-		data["perms"] = permission.Perms
+		data["buttonTypes"] = permission.ButtonTypes
 		data["menus"] = menu
 		data["username"] = username
 	} else {

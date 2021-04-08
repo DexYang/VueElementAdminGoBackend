@@ -16,7 +16,19 @@ const (
 	Export   = 6
 )
 
-var Perms = map[string]int{"Retrieve": 2, "Create": 3, "Update": 4, "Delete": 5, "Export": 6}
+type ButtonType struct {
+	Title string `json:"title"`
+	Name  string `json:"name"`
+	Type  int    `json:"type"`
+}
+
+var ButtonTypes = [...]ButtonType{
+	{Title: "查询", Name: "Retrieve", Type: 2},
+	{Title: "新增", Name: "Create", Type: 3},
+	{Title: "编辑", Name: "Update", Type: 4},
+	{Title: "删除", Name: "Delete", Type: 5},
+	{Title: "导出", Name: "Export", Type: 6},
+}
 
 func Permission(path string, permission ...int) gin.HandlerFunc {
 	return func(c *gin.Context) {
