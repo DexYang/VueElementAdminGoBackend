@@ -6,7 +6,7 @@ import (
 )
 
 type MenuVO struct {
-	ID uint `json:"id"`
+	ID int `json:"id"`
 
 	Name      string `json:"name"`
 	Type      int    `json:"type"`
@@ -21,11 +21,11 @@ type MenuVO struct {
 	Children []MenuVO `json:"children"`
 }
 
-func ExistMenuList(ids []uint) (bool, error) {
+func ExistMenuList(ids []int) (bool, error) {
 	return models.ExistMenuList(ids)
 }
 
-func GetMenuListByIDList(ids []uint) ([]models.Menu, error) {
+func GetMenuListByIDList(ids []int) ([]models.Menu, error) {
 	return models.GetMenuListByIDList(ids)
 }
 
@@ -80,7 +80,7 @@ func SaveMenu(menuVOList []MenuVO) error {
 	return nil
 }
 
-func DFSSaveMenu(menuList []models.Menu, parentID uint, perms string) error {
+func DFSSaveMenu(menuList []models.Menu, parentID int, perms string) error {
 	for i := 0; i < len(menuList); i++ {
 		menuList[i].ParentID = parentID
 		menuList[i].Order = i
@@ -123,7 +123,7 @@ func GetMenuOfUser(username string) ([]MenuVO, error) {
 		return nil, err
 	}
 
-	var roleIds []uint
+	var roleIds []int
 	for i := 0; i < len(user.Roles); i++ {
 		roleIds = append(roleIds, user.Roles[i].ID)
 	}
@@ -137,7 +137,7 @@ func GetMenuOfUser(username string) ([]MenuVO, error) {
 	return menuVOList, nil
 }
 
-func DFSGetMenuOfUser(parentID int, roleIds []uint) ([]models.Menu, error) {
+func DFSGetMenuOfUser(parentID int, roleIds []int) ([]models.Menu, error) {
 	menuList, err := models.GetMenuByRole(parentID, roleIds)
 	if err != nil {
 		return nil, err
@@ -162,7 +162,7 @@ func CheckPermission(username string, permissionTag string, permissionTypeList [
 		return false, err
 	}
 
-	var roleIds []uint
+	var roleIds []int
 	for i := 0; i < len(user.Roles); i++ {
 		roleIds = append(roleIds, user.Roles[i].ID)
 	}

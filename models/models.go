@@ -18,13 +18,13 @@ var sqliteName string
 
 // 扩展gorm.Model 定义
 type Model struct {
-	ID uint `gorm:"primary_key;AUTO_INCREMENT"`
+	ID int `gorm:"primary_key;AUTO_INCREMENT"`
 
 	CreatedAt time.Time
 	UpdatedAt time.Time
 	DeletedAt *time.Time
 
-	State int
+	State int `gorm:"default:0"`
 }
 
 func init() {

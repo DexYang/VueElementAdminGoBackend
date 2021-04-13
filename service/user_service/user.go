@@ -15,7 +15,7 @@ type UserVO struct {
 	Email    string `json:"email"`
 	Mobile   string `json:"mobile"`
 
-	Roles []uint `json:"roles"` // 用户与角色多对多
+	Roles []int `json:"roles"` // 用户与角色多对多
 }
 
 func GetUserList(offset int, limit int, key string) ([]UserVO, error) {

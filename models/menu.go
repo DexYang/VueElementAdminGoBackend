@@ -1,13 +1,14 @@
 package models
 
 import (
+	"errors"
 	"gorm.io/gorm"
 )
 
 type Menu struct {
 	Model
 
-	ParentID uint `gorm:"default:0" json:"parent_id"`
+	ParentID int `gorm:"default:0" json:"parent_id"`
 
 	Name      string `json:"name"`
 	Type      int    `json:"type"`
@@ -42,26 +43,26 @@ func GetMenu(parentID int) ([]Menu, error) {
 }
 
 func SetAllMenuState(state int) error {
-	return db.Model(&Menu{}).Update("state", state).Error
+	return db.Model(&Menu{}).Where("1=1").Update("state", state).Error
 }
 
-func ExistMenuByID(id uint) (bool, error) {
+func ExistMenuByID(id int) (bool, error) {
 	var menu Menu
-	err := db.Select("id").Where("id = ?", id).First(&menu).Error
-	if err != nil && err != gorm.ErrRecordNotFound {
-		return false, err
+	result := db.Where("id = ?", id).First(&menu)
+	if result.Error != nil && !errors.Is(result.Error, gorm.ErrRecordNotFound) {
+		return false, result.Error
 	}
 
-	if menu.ID > 0 {
-		return true, nil
+	if result.RowsAffected <= 0 || errors.Is(result.Error, gorm.ErrRecordNotFound) {
+		return false, nil
 	}
 
-	return false, nil
+	return true, nil
 }
 
 func SaveMenu(menu *Menu) error {
 	menu.State = 1
-	if err := db.Save(&menu).Error; err != nil {
+	if err := db.Model(&menu).Omit("CreateAt").Updates(&menu).Error; err != nil {
 		return err
 	}
 	return nil
@@ -69,7 +70,7 @@ func SaveMenu(menu *Menu) error {
 
 func CreateMenu(menu *Menu) error {
 	menu.State = 1
-	if err := db.Create(&menu).Error; err != nil {
+	if err := db.Omit("ID", "CreateAt").Create(&menu).Error; err != nil {
 		return err
 	}
 	return nil
@@ -93,7 +94,7 @@ func DeleteAllMenuStateEqZero() error {
 	return nil
 }
 
-func ExistMenuList(ids []uint) (bool, error) {
+func ExistMenuList(ids []int) (bool, error) {
 	var count int64
 
 	err := db.Model(&Menu{}).Where("id in (?)", ids).Count(&count).Error
@@ -108,7 +109,7 @@ func ExistMenuList(ids []uint) (bool, error) {
 	return false, nil
 }
 
-func GetMenuListByIDList(ids []uint) ([]Menu, error) {
+func GetMenuListByIDList(ids []int) ([]Menu, error) {
 	var menuList []Menu
 
 	err := db.Where("id in (?)", ids).Find(&menuList).Error
@@ -119,9 +120,9 @@ func GetMenuListByIDList(ids []uint) ([]Menu, error) {
 	return menuList, nil
 }
 
-func CheckPermissionByRole(roleIds []uint, permissionTag string, permissionTypeList []int) (bool, error) {
+func CheckPermissionByRole(roleIds []int, permissionTag string, permissionTypeList []int) (bool, error) {
 	type result struct {
-		ID uint
+		ID int
 	}
 
 	var res result
@@ -144,7 +145,7 @@ func CheckPermissionByRole(roleIds []uint, permissionTag string, permissionTypeL
 	return false, nil
 }
 
-func GetMenuByRole(parentID int, roleIds []uint) ([]Menu, error) {
+func GetMenuByRole(parentID int, roleIds []int) ([]Menu, error) {
 	var menu []Menu
 
 	err := db.Raw("SELECT DISTINCT menu.* FROM "+

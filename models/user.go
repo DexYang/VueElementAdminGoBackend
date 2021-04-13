@@ -7,17 +7,10 @@ import (
 	"encoding/hex"
 	"gorm.io/gorm"
 	"log"
-	"time"
 )
 
 type User struct {
-	ID uint `gorm:"primary_key;AUTO_INCREMENT"`
-
-	CreatedAt time.Time
-	UpdatedAt time.Time
-	DeletedAt *time.Time
-
-	State int `gorm:"default:0"`
+	Model
 
 	Username string `gorm:"type:varchar(100);not null;index"`
 	Password string
@@ -132,7 +125,7 @@ func ExistUserByUsername(username string, id int) (bool, error) {
 	err := db.
 		Select("id").
 		Where(&User{Username: username}).
-		Not(&User{ID: uint(id)}).
+		Not(&User{Model: Model{ID: id}}).
 		First(&user).
 		Error
 
@@ -152,8 +145,8 @@ func ExistUserByEmail(email string, id int) (bool, error) {
 
 	err := db.
 		Select("id").
-		Where(User{Email: email}).
-		Not(&User{ID: uint(id)}).
+		Where(&User{Email: email}).
+		Not(&User{Model: Model{ID: id}}).
 		First(&user).
 		Error
 

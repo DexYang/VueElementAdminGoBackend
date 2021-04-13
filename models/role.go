@@ -2,17 +2,10 @@ package models
 
 import (
 	"gorm.io/gorm"
-	"time"
 )
 
 type Role struct {
-	ID uint `gorm:"primary_key;AUTO_INCREMENT"`
-
-	CreatedAt time.Time
-	UpdatedAt time.Time
-	DeletedAt *time.Time
-
-	State int `gorm:"default:0"`
+	Model
 
 	RoleName string `gorm:"type:varchar(100);not null;index" json:"role_name"`
 	Remark   string
@@ -124,7 +117,7 @@ func DeleteRole(id int) error {
 		return err
 	}
 
-	db.Model(&role).Association("Menu").Clear()
+	_ = db.Model(&role).Association("Menu").Clear()
 
 	if err := db.Unscoped().Where("id = ?", id).Delete(&role).Error; err != nil {
 		return err
@@ -139,7 +132,7 @@ func ExistRoleByRoleName(roleName string, id int) (bool, error) {
 	err := db.
 		Select("id").
 		Where(&Role{RoleName: roleName}).
-		Not(&Role{ID: uint(id)}).
+		Not(&Role{Model: Model{ID: id}}).
 		First(&role).
 		Error
 

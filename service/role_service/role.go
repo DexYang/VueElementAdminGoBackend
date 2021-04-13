@@ -7,13 +7,13 @@ import (
 )
 
 type RoleVO struct {
-	ID    uint `json:"id"`
-	State int  `json:"state"`
+	ID    int `json:"id"`
+	State int `json:"state"`
 
 	RoleName string `json:"role_name"`
 	Remark   string `json:"remark"`
 
-	Menu []uint `json:"menu"`
+	Menu []int `json:"menu"`
 }
 
 func ExistRoleList(ids []uint) (bool, error) {
